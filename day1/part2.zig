@@ -4,7 +4,6 @@ const print = std.debug.print;
 var file_buf: [1024 * 1024]u8 = undefined; // The file do 20kB, I give it 1MB
 
 pub fn main() !void {
-    const time_start = std.time.microTimestamp();
     var left: [1000]i32 = undefined;
     var right: [1000]i32 = undefined;
 
@@ -21,19 +20,7 @@ pub fn main() !void {
         i += 1;
     }
 
-    std.mem.sort(i32, &left, {}, comptime std.sort.asc(i32));
-    std.mem.sort(i32, &right, {}, comptime std.sort.asc(i32));
-
-    const time_parsing = std.time.microTimestamp();
-    print("Parsing time: {d}μs\n", .{time_parsing - time_start});
-
-    const total_distance = distance(left, right);
-    const total_similarity = try similarity(left, right);
-
-    const time_end = std.time.microTimestamp();
-    print("Compute time: {d}μs\n", .{time_end - time_parsing});
-    print("\tDistance: {d}\n", .{total_distance});
-    print("\tSimilarity: {d}\n", .{total_similarity});
+    try std.testing.expectEqual(24869388, similarity(left, right));
 }
 
 fn distance(left: [1000]i32, right: [1000]i32) u32 {

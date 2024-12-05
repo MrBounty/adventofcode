@@ -55,15 +55,9 @@ const masks = [_][4][4]u8{
 };
 
 pub fn main() !void {
-    const time_start = std.time.microTimestamp();
-
     setMatrice('.');
     try fillMatrice();
-    const total = countMask();
-
-    const time_end = std.time.microTimestamp();
-    print("Total time: {d}μs\n", .{time_end - time_start});
-    print("Total: {d}\n", .{total});
+    try std.testing.expectEqual(2401, countMask());
 }
 
 fn evaluate(mask: [4][4]u8, sub: [4][4]u8) bool {

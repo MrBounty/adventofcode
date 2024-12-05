@@ -3,57 +3,43 @@ const print = std.debug.print;
 
 const State = enum { First, Second, Incr, Decr }; // Increase Decrease
 
-var line_buf: [64]u8 = undefined;
+var file_buf: [1024 * 1024]u8 = undefined; // The file do 20kB, I give it 1MB
 var second_buf: [64]u8 = undefined;
-var previous: u8 = 0;
-var current: u8 = 0;
 
 pub fn main() !void {
-    const time_start = std.time.microTimestamp();
-
-    var fbuf = std.heap.FixedBufferAllocator.init(&line_buf);
-    const alloc = fbuf.allocator();
-    var line = std.ArrayList(u8).initCapacity(alloc, line_buf.len) catch unreachable;
-
     const file = try std.fs.cwd().openFile("day2/input", .{});
     defer file.close();
+    const len = try file.readAll(&file_buf);
 
-    var buf_reader = std.io.bufferedReader(file.reader());
-    const reader = buf_reader.reader();
-
-    const writer = line.writer();
     var total_safe: usize = 0;
-    while (reader.streamUntilDelimiter(writer, '\n', null)) {
-        // Clear the line so we can reuse it.
-        defer line.clearRetainingCapacity();
+    var iter = std.mem.split(u8, file_buf[0..len], "\n");
+    while (iter.next()) |line| {
+        if (std.mem.eql(u8, line, "")) continue;
 
-        if (try isSafe(line.items)) {
+        if (try isSafe(line)) {
             total_safe += 1;
             continue;
         }
 
         var i: u8 = 0;
-        var it = std.mem.split(u8, line.items, " ");
+        var it = std.mem.split(u8, line, " ");
         while (it.next()) |_| {
-            const new_line = try removeOneIndex(line.items, i);
+            const new_line = try removeOneIndex(line, i);
             if (try isSafe(new_line)) {
                 total_safe += 1;
                 break;
             }
             i += 1;
         }
-    } else |err| switch (err) {
-        error.EndOfStream => {},
-        else => return err, // Propagate error
     }
 
-    const time_end = std.time.microTimestamp();
-    print("Total time: {d}μs\n", .{time_end - time_start});
-    print("Total safe: {d}\n", .{total_safe});
+    try std.testing.expectEqual(604, total_safe);
 }
 
 fn isSafe(line: []const u8) !bool {
     var state: State = .First;
+    var previous: u8 = 0;
+    var current: u8 = 0;
 
     var it = std.mem.split(u8, line, " ");
     while (it.next()) |x| {

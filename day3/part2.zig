@@ -19,27 +19,20 @@ const LookingFor = enum {
 var file_buf: [1024 * 1024]u8 = undefined; // The file do 20kB, I give it 1MB
 
 pub fn main() !void {
-    const time_start = std.time.microTimestamp();
-
     const file = try std.fs.cwd().openFile("day3/input", .{});
     defer file.close();
 
     const len = try file.readAll(&file_buf);
 
-    var total: u32 = 0;
-    var enable = true;
-    total += try parse(file_buf[0..len], &enable);
-
-    const time_end = std.time.microTimestamp();
-    print("Total time: {d}μs\n", .{time_end - time_start});
-    print("Total safe: {d}\n", .{total});
+    try std.testing.expectEqual(82857512, try parse(file_buf[0..len]));
 }
 
-fn parse(input: []const u8, enable: *bool) !u32 {
+fn parse(input: []const u8) !u32 {
     var state: LookingFor = .m_or_d;
     var total: u32 = 0;
     var intX_len: u8 = 0;
     var intY_len: u8 = 0;
+    var enable = true;
     var enable_buff: bool = true;
     for (input, 0..) |c, i| switch (state) {
         .m_or_d => switch (c) {
@@ -89,7 +82,7 @@ fn parse(input: []const u8, enable: *bool) !u32 {
         },
         .r_brace_do => switch (c) {
             ')' => {
-                enable.* = enable_buff;
+                enable = enable_buff;
                 enable_buff = true;
                 state = .m_or_d;
             },
@@ -108,7 +101,7 @@ fn parse(input: []const u8, enable: *bool) !u32 {
             ')' => {
                 state = .m_or_d;
                 if (intY_len > 0) {
-                    if (!enable.*) continue;
+                    if (!enable) continue;
                     const x = try std.fmt.parseInt(u32, input[i - (intX_len + intY_len + 1) .. i - intY_len - 1], 10);
                     const y = try std.fmt.parseInt(u32, input[i - intY_len .. i], 10);
                     total += x * y;
