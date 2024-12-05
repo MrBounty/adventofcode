@@ -11,6 +11,7 @@ Done with 1000 epoch on a AMD Ryzen 7 7800X3D with a Samsung SSD 980 PRO 2TB (up
 Can be run with `zig run -O ReleaseFast benchmark.zig`
 
 | Day | Part | Mean (μs)         | Min (μs) | Max (μs) |
+|-----|------|-------------------|----------|----------|
 | 1   | 1    |      +29 ± 3.74   |      +28 |      +99 |
 | 1   | 2    |      +26 ± 6.78   |      +24 |     +136 |
 | 2   | 1    |      +39 ± 6.00   |      +37 |     +179 |
