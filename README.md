@@ -9,6 +9,7 @@ Did it in zig, trying to be as memory efficient and fast as possible.
 Can be run with `zig run -O ReleaseFast benchmark.zig`
 
 | Day | Part | Mean (μs)         | Min (μs) | Max (μs) |
+|-----|------|-------------------|----------|----------|
 | 1   | 1    |      +29 ± 3.00   |      +28 |      +78 |
 | 1   | 2    |      +24 ± 2.65   |      +24 |      +56 |
 | 2   | 1    |      +43 ± 8.37   |      +37 |     +241 |
@@ -17,4 +18,4 @@ Can be run with `zig run -O ReleaseFast benchmark.zig`
 | 3   | 2    |      +23 ± 1.73   |      +20 |      +58 |
 | 4   | 2    |     +229 ± 26.15  |     +214 |     +417 |
 | 4   | 2    |     +232 ± 26.13  |     +213 |     +337 |
-| Total      |     +932 ± 108.11 |     +854 |    +2085 |
+| Total|      |     +932 ± 108.11 |     +854 |    +2085 |
