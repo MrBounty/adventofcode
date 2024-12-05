@@ -6,6 +6,8 @@ Did it in zig, trying to be as memory efficient and fast as possible.
 
 ## Benchmark
 
+Done with 1000 epoch on a AMD Ryzen 7 7800X3D with a Samsung SSD 980 PRO 2TB (up to 7,000/5,100MB/s for read/write speed) on one thread.
+
 Can be run with `zig run -O ReleaseFast benchmark.zig`
 
 | Day | Part | Mean (μs)         | Min (μs) | Max (μs) |
