@@ -6,8 +6,7 @@ const Rule = struct {
     right: usize,
 
     fn ok(self: Rule, sub_page: Rule) bool {
-        if (sub_page.left == self.right and sub_page.right == self.left) return false;
-        return true;
+        return !(sub_page.left == self.right and sub_page.right == self.left);
     }
 };
 
@@ -70,10 +69,10 @@ pub fn main() !void {
     while (iter.next()) |line| {
         if (std.mem.eql(u8, line, "")) break;
 
-        _ = try bad_rules.getOrPut(Rule{
+        _ = try bad_rules.put(Rule{
             .right = try std.fmt.parseInt(usize, line[0..2], 10),
             .left = try std.fmt.parseInt(usize, line[3..5], 10),
-        });
+        }, {});
     }
 
     // ========= Evaluate ===========
@@ -93,36 +92,15 @@ pub fn main() !void {
         total += try evaluate(bad_rules, page.items);
     }
 
-    try std.testing.expectEqual(4145, total);
+    try std.testing.expectEqual(6949, total);
 }
 
-fn pageOk(bad_rules: std.AutoHashMap(Rule, void), page: []usize) bool {
+fn evaluate(bad_rules: std.AutoHashMap(Rule, void), page: []usize) !usize {
     var iter = PageIterator{ .indexL = 0, .indexR = 0, .buff = page };
 
     defer iter.reset();
     while (iter.next()) |sub_page| {
-        if (bad_rules.contains(sub_page)) return false;
-    }
-    return true;
-}
-
-fn evaluate(bad_rules: std.AutoHashMap(Rule, void), page: []usize) !usize {
-    var notOk = true;
-    var iter = PageIterator{ .indexL = 0, .indexR = 0, .buff = page };
-
-    if (pageOk(bad_rules, page)) return 0;
-
-    while (notOk) {
-        notOk = false;
-        blk: {
-            while (iter.next()) |sub_page| {
-                if (bad_rules.contains(sub_page)) {
-                    notOk = true;
-                    iter.swap();
-                    break :blk;
-                }
-            }
-        }
+        if (bad_rules.contains(sub_page)) return 0;
     }
     const middle = try std.math.divFloor(usize, page.len, 2);
     return page[middle];

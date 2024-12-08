@@ -69,10 +69,10 @@ pub fn main() !void {
     while (iter.next()) |line| {
         if (std.mem.eql(u8, line, "")) break;
 
-        _ = try bad_rules.getOrPut(Rule{
+        _ = try bad_rules.put(Rule{
             .right = try std.fmt.parseInt(usize, line[0..2], 10),
             .left = try std.fmt.parseInt(usize, line[3..5], 10),
-        });
+        }, {});
     }
 
     // ========= Evaluate ===========
