@@ -14,6 +14,8 @@ const d52 = @import("day5/part2.zig");
 const d61 = @import("day6/part1.zig");
 const d71 = @import("day7/part1.zig");
 const d72 = @import("day7/part2.zig");
+const d81 = @import("day8/part1.zig");
+const d82 = @import("day8/part2.zig");
 
 const NUMBER_OF_RUN = 1000;
 
@@ -46,6 +48,9 @@ pub fn main() !void {
     separator();
     try benchmark(d71.main, 7, 1);
     print("| 7   | 2    |    Too long ~0.2s |        0 |        0 |\n", .{});
+    separator();
+    try benchmark(d81.main, 8, 1);
+    try benchmark(d82.main, 8, 2);
     separator();
     print("| Total      | {d: >8} ± {d: <6.2} | {d:>8} | {d:>8} |\n", .{ total_mean, total_std_dev, total_min, total_max });
     separator();
