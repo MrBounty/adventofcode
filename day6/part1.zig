@@ -1,5 +1,6 @@
 const std = @import("std");
 const print = std.debug.print;
+const file = @embedFile("input");
 
 const UP = Position{ .x = -1, .y = 0 };
 const RIGHT = Position{ .x = 0, .y = 1 };
@@ -89,25 +90,8 @@ const Map = struct {
 };
 
 pub fn main() !void {
-    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-    const allocator = gpa.allocator();
-    defer {
-        const deinit_status = gpa.deinit();
-        if (deinit_status == .leak) @panic("TEST FAIL");
-    }
-
-    // ========= Load file ===========
-    const file = try std.fs.cwd().openFile("day6/input", .{});
-    defer file.close();
-
-    const file_size = (try file.stat()).size;
-    const buffer = try allocator.alloc(u8, file_size);
-    defer allocator.free(buffer);
-
-    _ = try file.readAll(buffer);
-
     // ========= Parse map ===========
-    var iter = std.mem.split(u8, buffer, "\n");
+    var iter = std.mem.split(u8, file, "\n");
     var map = Map{};
 
     for (0..132) |x| {

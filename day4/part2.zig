@@ -1,7 +1,7 @@
 const std = @import("std");
 const print = std.debug.print;
+const file = @embedFile("input");
 
-var file_buf: [140 * 141]u8 = undefined;
 var matrice: [142][142]u8 = undefined;
 const masks = [_][3][3]u8{
     [3][3]u8{
@@ -53,12 +53,7 @@ fn setMatrice(c: u8) void {
 }
 
 fn fillMatrice() !void {
-    const file = try std.fs.cwd().openFile("day4/input", .{});
-    defer file.close();
-
-    _ = try file.readAll(&file_buf);
-
-    var iter = std.mem.split(u8, &file_buf, "\n");
+    var iter = std.mem.split(u8, file, "\n");
 
     var x: usize = 1;
     while (iter.next()) |line| {

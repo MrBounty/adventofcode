@@ -1,5 +1,6 @@
 const std = @import("std");
 const print = std.debug.print;
+const file = @embedFile("input");
 
 const VisitedBy = struct { up: bool = false, down: bool = false, right: bool = false, left: bool = false };
 
@@ -211,18 +212,8 @@ pub fn main() !void {
         if (deinit_status == .leak) @panic("TEST FAIL");
     }
 
-    // ========= Load file ===========
-    const file = try std.fs.cwd().openFile("day6/input", .{});
-    defer file.close();
-
-    const file_size = (try file.stat()).size;
-    const buffer = try allocator.alloc(u8, file_size);
-    defer allocator.free(buffer);
-
-    _ = try file.readAll(buffer);
-
     // ========= Parse map ===========
-    var iter = std.mem.split(u8, buffer, "\n");
+    var iter = std.mem.split(u8, file, "\n");
     var map = try Map.init(allocator);
     defer map.deinit();
 

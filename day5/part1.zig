@@ -1,5 +1,6 @@
 const std = @import("std");
 const print = std.debug.print;
+const file = @embedFile("input");
 
 const Rule = struct {
     left: usize,
@@ -51,21 +52,11 @@ pub fn main() !void {
         if (deinit_status == .leak) @panic("TEST FAIL");
     }
 
-    // ========= Load file ===========
-    const file = try std.fs.cwd().openFile("day5/input", .{});
-    defer file.close();
-
-    const file_size = (try file.stat()).size;
-    const buffer = try allocator.alloc(u8, file_size);
-    defer allocator.free(buffer);
-
-    _ = try file.readAll(buffer);
-
     // ========= Parse Rules ===========
     var bad_rules = std.AutoHashMap(Rule, void).init(allocator);
     defer bad_rules.deinit();
 
-    var iter = std.mem.split(u8, buffer, "\n");
+    var iter = std.mem.split(u8, file, "\n");
     while (iter.next()) |line| {
         if (std.mem.eql(u8, line, "")) break;
 

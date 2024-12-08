@@ -1,5 +1,6 @@
 const std = @import("std");
 const print = std.debug.print;
+const file = @embedFile("input");
 
 const LookingFor = enum {
     m_or_d,
@@ -16,15 +17,8 @@ const LookingFor = enum {
     r_brace_do,
 };
 
-var file_buf: [1024 * 1024]u8 = undefined; // The file do 20kB, I give it 1MB
-
 pub fn main() !void {
-    const file = try std.fs.cwd().openFile("day3/input", .{});
-    defer file.close();
-
-    const len = try file.readAll(&file_buf);
-
-    try std.testing.expectEqual(82857512, try parse(file_buf[0..len]));
+    try std.testing.expectEqual(82857512, try parse(file));
 }
 
 fn parse(input: []const u8) !u32 {

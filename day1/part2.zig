@@ -1,18 +1,14 @@
 const std = @import("std");
 const print = std.debug.print;
 
-var file_buf: [1024 * 1024]u8 = undefined; // The file do 20kB, I give it 1MB
+const file = @embedFile("input");
 
 pub fn main() !void {
     var left: [1000]i32 = undefined;
     var right: [1000]i32 = undefined;
 
-    const file = try std.fs.cwd().openFile("day1/input", .{});
-    defer file.close();
-    const len = try file.readAll(&file_buf);
-
     var i: u32 = 0;
-    var iter = std.mem.split(u8, file_buf[0..len], "\n");
+    var iter = std.mem.split(u8, file, "\n");
     while (iter.next()) |line| {
         if (i == 1000) continue;
         left[i] = try std.fmt.parseInt(i32, line[0..5], 10);

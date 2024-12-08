@@ -1,18 +1,14 @@
 const std = @import("std");
 const print = std.debug.print;
+const file = @embedFile("input");
 
 const State = enum { First, Second, Incr, Decr }; // Increase Decrease
 
-var file_buf: [1024 * 1024]u8 = undefined; // The file do 20kB, I give it 1MB
 var second_buf: [64]u8 = undefined;
 
 pub fn main() !void {
-    const file = try std.fs.cwd().openFile("day2/input", .{});
-    defer file.close();
-    const len = try file.readAll(&file_buf);
-
     var total_safe: usize = 0;
-    var iter = std.mem.split(u8, file_buf[0..len], "\n");
+    var iter = std.mem.split(u8, file, "\n");
     while (iter.next()) |line| {
         if (std.mem.eql(u8, line, "")) continue;
 

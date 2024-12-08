@@ -1,10 +1,11 @@
 const std = @import("std");
 const print = std.debug.print;
+const file = @embedFile("input");
 
 // Look like the complexity is 2 ^ (n - 1)
 // with n len of a int list
 //
-// So that mean I need to do
+// Very happy with this solution, I juste needed to update like 5 things to make part 2 work
 
 const Operator = struct {
     value: usize,
@@ -14,23 +15,7 @@ const Operator = struct {
 pub fn main() !void {
     // const test_value = "190: 10 19\n3267: 81 40 27\n83: 17 5\n156: 15 6\n7290: 6 8 6 15\n161011: 16 10 13\n192: 17 8 14\n21037: 9 7 18 13\n292: 11 6 16 20";
 
-    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-    const allocator = gpa.allocator();
-    defer {
-        const deinit_status = gpa.deinit();
-        if (deinit_status == .leak) @panic("TEST FAIL");
-    }
-
-    const file = try std.fs.cwd().openFile("day7/input", .{});
-    defer file.close();
-
-    const file_size = (try file.stat()).size;
-    const buffer = try allocator.alloc(u8, file_size);
-    defer allocator.free(buffer);
-
-    _ = try file.readAll(buffer);
-
-    var iter = std.mem.split(u8, buffer[0..file_size], "\n");
+    var iter = std.mem.split(u8, file, "\n");
     var total: usize = 0;
     while (iter.next()) |line| {
         if (std.mem.eql(u8, line, "")) continue;

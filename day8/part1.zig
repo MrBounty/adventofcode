@@ -1,5 +1,6 @@
 const std = @import("std");
 const print = std.debug.print;
+const file = @embedFile("input");
 
 const MAP_SIZE = 50;
 
@@ -110,18 +111,9 @@ pub fn main() !void {
         if (deinit_status == .leak) @panic("TEST FAIL");
     }
 
-    const file = try std.fs.cwd().openFile("day8/input", .{});
-    defer file.close();
-
-    const file_size = (try file.stat()).size;
-    const buffer = try allocator.alloc(u8, file_size);
-    defer allocator.free(buffer);
-
-    _ = try file.readAll(buffer);
-
     var map = Map{ .unique_antenna = std.AutoHashMap(u8, usize).init(allocator) };
     defer map.unique_antenna.deinit();
-    var iter = std.mem.split(u8, buffer, "\n");
+    var iter = std.mem.split(u8, file, "\n");
     var x: usize = 0;
     while (iter.next()) |line| {
         if (std.mem.eql(u8, line, "")) continue;
