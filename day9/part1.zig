@@ -11,6 +11,10 @@ const Block = struct {
 
 pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    defer {
+        const deinit_status = gpa.deinit();
+        if (deinit_status == .leak) @panic("TEST FAIL");
+    }
     const allocator = gpa.allocator();
 
     var total_file_block: usize = 0;
