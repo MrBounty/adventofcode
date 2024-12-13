@@ -1,5 +1,4 @@
 const std = @import("std");
-const print = std.debug.print;
 const input = @embedFile("input");
 const MAP_SIZE = 60;
 
