@@ -38,7 +38,7 @@ pub fn main() !void {
         }
     }
 
-    print("Total: {d}\n", .{tl_quadrant * tr_quadrant * bl_quadrant * br_quadrant});
+    try std.testing.expectEqual(218965032, tl_quadrant * tr_quadrant * bl_quadrant * br_quadrant);
 }
 
 fn posFinal(x0: Int, y0: Int, vX: Int, vY: Int, mapW: Int, mapH: Int, dt: Int) [2]Int {
