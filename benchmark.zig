@@ -28,6 +28,7 @@ const d131 = @import("day13/part1.zig");
 const d141 = @import("day14/part1.zig");
 const d151 = @import("day15/part1.zig");
 const d152 = @import("day15/part2.zig");
+const d161 = @import("day16/part1.zig");
 
 const NUMBER_OF_RUN = 50;
 
@@ -85,7 +86,10 @@ pub fn main() !void {
     try benchmark(d151.main, 15, 1);
     try benchmark(d152.main, 15, 2);
     separator();
-    print("| Total      | {d: >8} ± {d: <6.2} | {d:>8} | {d:>8} |\n", .{ total_mean, total_std_dev, total_min, total_max });
+    try benchmark(d161.main, 16, 1);
+    print("| 16  | 2    |    Too long ~8s   |        0 |        0 |\n", .{});
+    separator();
+    print("| Total      | {d: >8} ± {d: <6.0} | {d:>8} | {d:>8} |\n", .{ total_mean, total_std_dev, total_min, total_max });
     separator();
 }
 
@@ -99,7 +103,7 @@ pub fn benchmark(func: anytype, day: u8, part: u8) !void {
     }
 
     // Adjusted tabs for better alignment
-    print("| {d:<3} | {d:<4} | {d:>8} ± {d:<6.2} | {d:>8} | {d:>8} |\n", .{ day, part, mean(time_buff), std_dev(time_buff), min(time_buff), max(time_buff) });
+    print("| {d:<3} | {d:<4} | {d:>8} ± {d:<6.0} | {d:>8} | {d:>8} |\n", .{ day, part, mean(time_buff), std_dev(time_buff), min(time_buff), max(time_buff) });
     total_mean += mean(time_buff);
     total_min += min(time_buff);
     total_max += max(time_buff);
